@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: DEV-1
+      author: Pavel
+      changes:
+        - createTable:
+            tableName: persons
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_person
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: middle_name
+                  type: varchar
+              - column:
+                  name: birth_date
+                  type: date
+
+        - createTable:
+            tableName: organisations
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_organisations
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: short_name
+                  type: varchar
+              - column:
+                  name: inn
+                  type: bigint
+              - column:
+                  name: ogrn
+                  type: bigint
+              - column:
+                  name: mailing_address
+                  remarks: почтовый адрес
+                  type: varchar
+              - column:
+                  name: legal_address
+                  remarks: юридический адрес
+                  type: varchar
+              - column:
+                  name: ceo_id
+                  remarks: генеральный директор
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_organisations_persons
+                    references: persons(id)
+
+        - createTable:
+            tableName: branch
+            remarks: Филиалы
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_branch
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  type: varchar
+                  name: mailing_address
+              - column:
+                  remarks: руководитель филиала
+                  name: head_id
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_branch_persons
+                    references: persons(id)
+              - column:
+                  name: organisation_id
+                  remarks: родительская организация
+                  type: integer
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_branch_organisations
+                    references: organisations(id)
