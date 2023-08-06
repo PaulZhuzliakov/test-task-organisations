@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: DEV-1
+      id: Task-0001
       author: Pavel
       changes:
         - createTable:
