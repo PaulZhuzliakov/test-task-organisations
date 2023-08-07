@@ -15,40 +15,43 @@ import java.util.Optional;
 
 @Repository
 public class JdbcOperationsOrganisationRepository implements OrganisationRepository, RowMapper<Organisation> {
-    @Autowired
     private final JdbcOperations jdbcOperations;
 
+    private String mainSql =
+            "select o.id,\n" +
+            "       o.full_name,\n" +
+            "       o.short_name,\n" +
+            "       o.inn,\n" +
+            "       o.ogrn,\n" +
+            "       o.mailing_address,\n" +
+            "       o.legal_address,\n" +
+            "       ceo.id          ceo_id,\n" +
+            "       ceo.last_name   ceo_last_name,\n" +
+            "       ceo.first_name  ceo_first_name,\n" +
+            "       ceo.middle_name ceo_middle_name,\n" +
+            "       ceo.birth_date  ceo_birth_date\n" +
+            "from organisations o\n" +
+            "         left join persons ceo on o.ceo_id = ceo.id";
+
+    @Autowired
     public JdbcOperationsOrganisationRepository(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
 
     @Override
     public List<Organisation> findAllOrganisations() {
-        return this.jdbcOperations.query(
-                "select o.id, o.full_name, o.short_name, o.inn, o.ogrn, o.mailing_address, o.legal_address,\n" +
-                        "ceo.id ceo_id, ceo.last_name ceo_last_name, ceo.first_name ceo_first_name, " +
-                        "ceo.middle_name ceo_middle_name, ceo.birth_date ceo_birth_date\n" +
-                        "from organisations o\n" +
-                        "left join persons ceo on o.ceo_id = ceo.id",
-                this);
+        return this.jdbcOperations.query(mainSql, this);
+    }
+
+    @Override
+    public List<Organisation> findOrganisationsByParam(String search) {
+        return this.jdbcOperations.query(mainSql ,
+                       this);
     }
 
     @Override
     public Optional<Organisation> findOrganisation(Long id) {
-        return this.jdbcOperations.query("select o.id,\n" +
-                        "       o.full_name,\n" +
-                        "       o.short_name,\n" +
-                        "       o.inn,\n" +
-                        "       o.ogrn,\n" +
-                        "       o.mailing_address,\n" +
-                        "       o.legal_address,\n" +
-                        "       ceo.id          ceo_id,\n" +
-                        "       ceo.last_name   ceo_last_name,\n" +
-                        "       ceo.first_name  ceo_first_name,\n" +
-                        "       ceo.middle_name ceo_middle_name,\n" +
-                        "       ceo.birth_date  ceo_birth_date\n" +
-                        "from organisations o\n" +
-                        "         left join persons ceo on o.ceo_id = ceo.id\n" +
+        return this.jdbcOperations.query(mainSql +
                         "where o.id = ?      ",
                         new Object[]{id}, this)
                 .stream().findFirst();

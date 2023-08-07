@@ -5,10 +5,7 @@ import com.test.testtask.service.OrganisationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class OrganisationController {
     /**
      * Репозиторий организаций
      * */
+    @Autowired
     private final OrganisationService organisationService;
 
     @Autowired
@@ -38,7 +36,13 @@ public class OrganisationController {
     public ResponseEntity<List<Organisation>> getAllOrganisations() {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(this.organisationService.findAllOrganisations());
+                .body(this.organisationService.findOrganisations());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Organisation>> getOrganisationsByParam(@RequestParam String search) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(this.organisationService.findOrganisationsByParam(search));
+    }
 }

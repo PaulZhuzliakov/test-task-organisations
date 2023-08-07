@@ -34,7 +34,7 @@ public class OrganisationService {
      * олучает все организации, по id организаций вытаскиваются все филиалы, которые привязаны к этим id,
      * к каждой организации добавляется список её филиалов
      * */
-    public List<Organisation> findAllOrganisations() {
+    public List<Organisation> findOrganisations() {
         List<Organisation> organisations = organisationRepository.findAllOrganisations();
         List<Long> organisationsIds = organisations.stream().map(Organisation::getId).collect(Collectors.toList());
         List<Branch> branches = branchService.findBranchesByOrganisationId(organisationsIds);
@@ -55,6 +55,30 @@ public class OrganisationService {
         for (Organisation o: organisations) {
             o.setBranches(map.get(o.id));
         }
+        return organisations;
+    }
+
+    public List<Organisation> findOrganisationsByParam(String search) {
+        List<Organisation> organisations = organisationRepository.findOrganisationsByParam(search);
+//        List<Long> organisationsIds = organisations.stream().map(Organisation::getId).collect(Collectors.toList());
+//        List<Branch> branches = branchService.findBranchesByOrganisationId(organisationsIds);
+//
+//        HashMap<Long, ArrayList<Branch>> map = new HashMap<>();
+//        for (Branch b: branches) {
+//            if (map.containsKey(b.organisationId)) {
+//                map.get(b.organisationId).add(b);
+//            } else {
+//                ArrayList<Branch> branchList = new ArrayList<>();
+//                branchList.add(b);
+//                map.put(b.organisationId, branchList);
+//            }
+//        }
+//        for(Map.Entry<Long, ArrayList<Branch>> entry : map.entrySet() ){
+//            logger.info(entry.getKey() + " = " + entry.getValue());
+//        }
+//        for (Organisation o: organisations) {
+//            o.setBranches(map.get(o.id));
+//        }
         return organisations;
     }
 
