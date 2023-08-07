@@ -1,6 +1,5 @@
 package com.test.testtask.repository;
 
-import com.test.testtask.domain.Branch;
 import com.test.testtask.domain.Organisation;
 import com.test.testtask.domain.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JdbcOperationsOrganisationRepository implements OrganisationRepository, RowMapper<Organisation> {
@@ -31,6 +31,27 @@ public class JdbcOperationsOrganisationRepository implements OrganisationReposit
                         "from organisations o\n" +
                         "left join persons ceo on o.ceo_id = ceo.id",
                 this);
+    }
+
+    @Override
+    public Optional<Organisation> findOrganisation(Long id) {
+        return this.jdbcOperations.query("select o.id,\n" +
+                        "       o.full_name,\n" +
+                        "       o.short_name,\n" +
+                        "       o.inn,\n" +
+                        "       o.ogrn,\n" +
+                        "       o.mailing_address,\n" +
+                        "       o.legal_address,\n" +
+                        "       ceo.id          ceo_id,\n" +
+                        "       ceo.last_name   ceo_last_name,\n" +
+                        "       ceo.first_name  ceo_first_name,\n" +
+                        "       ceo.middle_name ceo_middle_name,\n" +
+                        "       ceo.birth_date  ceo_birth_date\n" +
+                        "from organisations o\n" +
+                        "         left join persons ceo on o.ceo_id = ceo.id\n" +
+                        "where o.id = ?      ",
+                        new Object[]{id}, this)
+                .stream().findFirst();
     }
 
     @Override
