@@ -1,6 +1,7 @@
 package com.test.testtask.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Модель Организации
@@ -81,5 +82,33 @@ public class Organisation {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Organisation)) return false;
+        Organisation that = (Organisation) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(fullName, that.fullName) && Objects.equals(shortName, that.shortName) && Objects.equals(inn, that.inn) && Objects.equals(ogrn, that.ogrn) && Objects.equals(mailingAddress, that.mailingAddress) && Objects.equals(legalAddress, that.legalAddress) && Objects.equals(ceo, that.ceo) && Objects.equals(branches, that.branches);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), fullName, shortName, inn, ogrn, mailingAddress, legalAddress, ceo, branches);
+    }
+
+    @Override
+    public String toString() {
+        return "Organisation{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", shortName='" + shortName + '\'' +
+                ", inn=" + inn +
+                ", ogrn=" + ogrn +
+                ", mailingAddress='" + mailingAddress + '\'' +
+                ", legalAddress='" + legalAddress + '\'' +
+                ", ceo=" + ceo +
+                ", branches=" + branches +
+                '}';
     }
 }

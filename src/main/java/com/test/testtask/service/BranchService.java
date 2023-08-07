@@ -18,8 +18,8 @@ public class BranchService {
         this.branchRepository = branchRepository;
     }
 
-    public List<Branch> findBranchesByOrganisationId(Long organisationId) {
-        return branchRepository.findBranchesByOrganisationId(organisationId);
+    public List<Branch> findBranchesByOrganisationId(List<Long> organisationIds) {
+        return branchRepository.findBranchesByOrganisationId(organisationIds);
     }
 
 }
