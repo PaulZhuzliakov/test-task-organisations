@@ -2,6 +2,8 @@ package com.test.testtask.dev;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,9 +46,8 @@ public class SqlGenerator {
                     "'" + br.get(0) + "'", "'" + br.get(1) + "'"//филиалы
             ));
         }
-        String path = getClass().getClassLoader().getResource("").getPath();
 
-        try (PrintWriter out = new PrintWriter("generatedSqlQuery.txt")) {
+        try (PrintWriter out = new PrintWriter("src/main/resources/db/sql/generatedSqlQuery.txt")) {
             out.println(sb.toString());
         }
 
