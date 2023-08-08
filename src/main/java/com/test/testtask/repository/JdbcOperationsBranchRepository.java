@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Репозиторий для извлечения филиалов из БД
+ */
 @Repository
 public class JdbcOperationsBranchRepository implements BranchRepository, RowMapper<Branch> {
 
@@ -24,6 +27,9 @@ public class JdbcOperationsBranchRepository implements BranchRepository, RowMapp
         this.jdbcOperations = jdbcOperations;
     }
 
+    /*
+     * Запрос для получения филиалов по id организаций к которым они привязаны
+     * */
     @Override
     public List<Branch> findBranchesByOrganisationId(List<Long> organisationId) {
         String ids = organisationId.stream().map(String::valueOf).collect(Collectors.joining(","));
@@ -45,6 +51,9 @@ public class JdbcOperationsBranchRepository implements BranchRepository, RowMapp
         return query;
     }
 
+    /**
+     * маппер филиала
+     * */
     @Override
     public Branch mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Branch(

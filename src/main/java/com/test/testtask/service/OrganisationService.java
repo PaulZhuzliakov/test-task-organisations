@@ -1,16 +1,15 @@
 package com.test.testtask.service;
 
-import com.fasterxml.jackson.databind.util.TypeKey;
 import com.test.testtask.domain.Branch;
 import com.test.testtask.domain.Organisation;
-import com.test.testtask.repository.BranchRepository;
 import com.test.testtask.repository.OrganisationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /*
@@ -18,8 +17,6 @@ import java.util.stream.Collectors;
 * */
 @Service
 public class OrganisationService {
-
-    Logger logger = LoggerFactory.getLogger(OrganisationService.class);
 
     private final OrganisationRepository organisationRepository;
     private final BranchService branchService;
@@ -31,11 +28,17 @@ public class OrganisationService {
     }
 
     /**
-     * олучает все организации, по id организаций вытаскиваются все филиалы, которые привязаны к этим id,
-     * к каждой организации добавляется список её филиалов
+     * получает все организации если небыло задано поисковое слово, или все организации без поискового слова,
+     * затем по id полученных организаций вытаскиваются все филиалы, которые привязаны к этим id
      * */
-    public List<Organisation> findOrganisations() {
-        List<Organisation> organisations = organisationRepository.findAllOrganisations();
+    public List<Organisation> findOrganisations(String search) {
+        List<Organisation> organisations;
+        if (search == null) {
+            organisations = organisationRepository.findAllOrganisations();
+        } else {
+            organisations = organisationRepository.findOrganisationsByParam(search);
+        }
+
         List<Long> organisationsIds = organisations.stream().map(Organisation::getId).collect(Collectors.toList());
         List<Branch> branches = branchService.findBranchesByOrganisationId(organisationsIds);
 
@@ -49,36 +52,9 @@ public class OrganisationService {
                 map.put(b.organisationId, branchList);
             }
         }
-        for(Map.Entry<Long, ArrayList<Branch>> entry : map.entrySet() ){
-            logger.info(entry.getKey() + " = " + entry.getValue());
-        }
         for (Organisation o: organisations) {
             o.setBranches(map.get(o.id));
         }
-        return organisations;
-    }
-
-    public List<Organisation> findOrganisationsByParam(String search) {
-        List<Organisation> organisations = organisationRepository.findOrganisationsByParam(search);
-//        List<Long> organisationsIds = organisations.stream().map(Organisation::getId).collect(Collectors.toList());
-//        List<Branch> branches = branchService.findBranchesByOrganisationId(organisationsIds);
-//
-//        HashMap<Long, ArrayList<Branch>> map = new HashMap<>();
-//        for (Branch b: branches) {
-//            if (map.containsKey(b.organisationId)) {
-//                map.get(b.organisationId).add(b);
-//            } else {
-//                ArrayList<Branch> branchList = new ArrayList<>();
-//                branchList.add(b);
-//                map.put(b.organisationId, branchList);
-//            }
-//        }
-//        for(Map.Entry<Long, ArrayList<Branch>> entry : map.entrySet() ){
-//            logger.info(entry.getKey() + " = " + entry.getValue());
-//        }
-//        for (Organisation o: organisations) {
-//            o.setBranches(map.get(o.id));
-//        }
         return organisations;
     }
 

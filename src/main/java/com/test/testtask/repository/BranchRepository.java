@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BranchRepository {
 
-    public List<Branch> findBranchesByOrganisationId(List<Long> organisationId);
+    List<Branch> findBranchesByOrganisationId(List<Long> organisationId);
 }

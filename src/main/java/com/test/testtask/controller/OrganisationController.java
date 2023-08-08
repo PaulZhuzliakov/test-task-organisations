@@ -16,10 +16,6 @@ import java.util.List;
 @RequestMapping("/organisation")
 public class OrganisationController {
 
-    /**
-     * Репозиторий организаций
-     * */
-    @Autowired
     private final OrganisationService organisationService;
 
     @Autowired
@@ -32,17 +28,14 @@ public class OrganisationController {
         return ResponseEntity.of(this.organisationService.findOrganisation(id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Organisation>> getAllOrganisations() {
+    /*
+    * получение списка всех организаций, если не был передан поисковый запрос
+    * при наличии запросы получение списка организаций по запросу
+    * */
+    @GetMapping()
+    public ResponseEntity<List<Organisation>> getOrganisations(@RequestParam(required = false) String search) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(this.organisationService.findOrganisations());
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<Organisation>> getOrganisationsByParam(@RequestParam String search) {
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(this.organisationService.findOrganisationsByParam(search));
+                .body(this.organisationService.findOrganisations(search));
     }
 }

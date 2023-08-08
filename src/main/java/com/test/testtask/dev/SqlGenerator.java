@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+* класс для генерации sql запроса, наполняющего бд тестовыми данными
+* */
 public class SqlGenerator {
 
     String generateSqlQuery() throws IOException {
-        List<List<String>> organisations = new SqlGenerator().getRecords("organisations.csv");
-        List<List<String>> persons = new SqlGenerator().getRecords("persons.csv");
-        List<List<String>> branches = new SqlGenerator().getRecords("branches.csv");
+        List<List<String>> organisations = new SqlGenerator().getRecords("csv/organisations.csv");
+        List<List<String>> persons = new SqlGenerator().getRecords("csv/persons.csv");
+        List<List<String>> branches = new SqlGenerator().getRecords("csv/branches.csv");
 
         StringBuilder sb = new StringBuilder();
 
