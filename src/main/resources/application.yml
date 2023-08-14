@@ -10,7 +10,7 @@ spring:
     init:
       mode: always
       continue-on-error: false
-      data-locations: classpath:db/sql/generatedSqlQuery.txt
+      data-locations: classpath:db/sql/generatedSqlQuery.sql
 ---
 spring:
   config:

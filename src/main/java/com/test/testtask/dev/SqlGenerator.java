@@ -47,7 +47,7 @@ public class SqlGenerator {
             ));
         }
 
-        try (PrintWriter out = new PrintWriter("src/main/resources/db/sql/generatedSqlQuery.txt")) {
+        try (PrintWriter out = new PrintWriter("src/main/resources/db/sql/generatedSqlQuery.sql")) {
             out.println(sb.toString());
         }
 
